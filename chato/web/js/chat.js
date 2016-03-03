@@ -14,7 +14,6 @@ var channelID = "ch1",
     isReconnect = false;
 
 var chatWindow = null;
-updateStatusline("Not connected.");
 
 setupDemo();
 connect();
@@ -41,20 +40,10 @@ function subscribeChannel(channelID) {
    $("#show_chat_window").removeClass("message_received");
 }
 
-function updateStatusline(status) {
-   $(".statusline").html(status);
-};
-
-
 function connect() {
 
    var wsuri;
-   if (document.location.origin == "file://") {
-      wsuri = "ws://127.0.0.1:8080/ws";
-   } else {
-      wsuri = (document.location.protocol === "http:" ? "ws:" : "wss:") + "//" +
-                  document.location.host + "/ws";
-   }
+   wsuri = "ws://127.0.0.1:9166/ws";
    var connection = new autobahn.Connection({
       url: wsuri,
       realm: "coffee"
@@ -78,12 +67,6 @@ function connect() {
    connection.onclose = function(reason, details) {
       sess = null;
       console.log("connection closed ", reason, details);
-
-       if (details.will_retry) {
-         updateStatusline("Trying to reconnect in " + parseInt(details.retry_delay) + " s.");
-      } else {
-         updateStatusline("Disconnected");
-      }
    }
 
    connection.open();
@@ -92,27 +75,8 @@ function connect() {
 
 
 function changeChannelIndicators ( newChannelID ) {
-
-   // indicate presently picked channel via highlighting
-   var channelSelectors = $(".chat_channel_selector"),
-       currentChannel;
-
-   for (var i = 0; i < channelSelectors.length; i++) {
-
-      if ("ch" + (i + 1) == newChannelID) {
-
-         $(channelSelectors[i]).addClass("channel_selected");
-         currentChannel = i + 1;
-      }
-
-      else if ($(channelSelectors[i]).hasClass("channel_selected")) {
-
-         $(channelSelectors[i]).removeClass("channel_selected");
-      }
-   }
-
    // set the channel title on the chat window
-   $("#channel_title").text("Channel " + currentChannel);
+   $("#channel_title").text("Channel " + newChannelID);
 }
 
 
@@ -165,18 +129,6 @@ function setupDemo() {
       };
 
    };
-
-
-   $("#helpButton").click(function() {
-
-      $(".info_bar").toggle();
-
-      if ($("#chat_window:visible").length) {
-         $("#chat_window").toggle(300);
-      }
-
-   });
-
 }
 
 function sendMessage(messageInput) {

@@ -1,12 +1,3 @@
-/*****************************/
-/* old demo.css styles begin */
-/*****************************/
-
-/* Segoe UI */
-/* define here for used weights & styles so that
-font-weight & style declarations work for this + the fallback
-web font */
-
 @font-face {
    font-family: 'Segoe UI';
    src: local('Segoe UI');
