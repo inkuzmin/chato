@@ -2,7 +2,7 @@
 
 This project is an __alpha__ attempt at helping anyone implement a chat service/client in your own server and website.
 
-For now, we are only providing a server (implemented using [Crossbar](http://crossbar.io)) and a demo client that you can access under `http://localhost:8080`.
+For now, we are only providing a server (implemented using [Crossbar](http://crossbar.io)) and a demo client that you can access under `http://localhost:9166`.
 
 #### Features ####
 
@@ -24,7 +24,7 @@ $ pip install -r requirements.txt
 $ ./run
 ```
 
-This starts a Crossbar server and you can test it pointing your browser at `http://localhost:8080` for a very ugly and basic implementation of a server.
+This starts a Crossbar server and you can test it pointing your browser at `http://localhost:9166` for a very ugly and basic implementation of a server.
 
 
 ### Using Client in a Django (alpha) ###
@@ -53,5 +53,8 @@ $ ./run_tests
 ### Roadmap ###
 
 - Refactor Django code.
-- Create proper encapsulated CSS
+- Add django management command to start Crossbar server.
+- Create proper encapsulated CSS.
 - Add flexibility through configuration flags and settings variables.
+- Presence indicator (user went online, offline)
+- More tests.
