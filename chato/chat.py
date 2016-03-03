@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
-from twisted.internet.defer import inlineCallbacks
+from twisted.internet.defer import inlineCallbacks, returnValue
 from twisted.logger import Logger
 
 from autobahn.twisted.wamp import ApplicationSession
 
-from history import MemoryHistory
+from history import CassandraHistory
 
-history = MemoryHistory()
+history = CassandraHistory(["localhost"], "chato")
 
 
 class AppSession(ApplicationSession):
@@ -24,14 +24,16 @@ class AppSession(ApplicationSession):
 
         self.log.debug('History: {}'.format(history))
 
-    def getHistory(self, channel_id, lines=100, offset=0):
+    @inlineCallbacks
+    def getHistory(self, channel_id, lines=80, offset=0):
         """Gets `lines` of history.
 
         :param channel_id: The channel_id.
         :param lines: How many lines to retrieve, defaults to 100.
         :param offset: Defaults to 0, works similarly as SQL Offset.
         """
-        return history.get(channel_id, lines, offset)
+        data = yield history.get(channel_id, lines, offset)
+        returnValue(data)
 
     @inlineCallbacks
     def sendMessage(self, payload):
