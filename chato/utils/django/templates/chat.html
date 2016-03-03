@@ -1,0 +1,40 @@
+{% load staticfiles %}
+
+{% if include_css %}
+  <link rel="stylesheet" href="{% static "chato/chat.css" %}">
+{% endif %}
+
+{% if include_jquery %}
+  <script src="https://code.jquery.com/jquery-2.2.1.min.js"></script>
+{% endif %}
+<button class="flatButton" id="show_chat_window">Chat</button>
+
+<div id="chat_window">
+   <button class="flatButton" id="hide_chat_window">X</button>
+   <div id="channel_title">Channel 1</div>
+   <div class="content">
+      <div>
+         <span id="my_nick">My Nick </span><input type="text" id="nick" size="15" maxlength="15" />
+      </div>
+      <div id="messages_box">
+
+      </div>
+      <div>
+         <textarea id="message_input" rows="2" placeholder="Type your chat message here"></textarea>
+         <!--<button id="send_message" onclick="send_message()">Send</button>-->
+      </div>
+    </div>
+</div>
+
+<!-- Include Flash WebSocket via Conditional Comment:
+     http://msdn.microsoft.com/en-us/library/ms537512%28v=vs.85%29.aspx -->
+<!--[if lte IE 9]>
+   <script type="text/javascript">
+     WEB_SOCKET_SWF_LOCATION = "../../flashws/WebSocketMain.swf";
+   </script>
+   <script type="text/javascript" src="../../flashws/swfobject.js"></script>
+   <script type="text/javascript" src="../../flashws/web_socket.js"></script>
+<![endif]-->
+
+<script src="https://autobahn.s3.amazonaws.com/autobahnjs/latest/autobahn.min.jgz"></script>
+<script type="text/javascript" src="{% static "chato/chat.js" %}"></script>

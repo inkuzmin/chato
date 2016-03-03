@@ -4,13 +4,12 @@ This project is an __alpha__ attempt at helping anyone implement a chat service/
 
 For now, we are only providing a server (implemented using [Crossbar](http://crossbar.io)) and a demo client that you can access under `http://localhost:8080`.
 
-Soon, we'll be adding generic chat clientes in HTML + CSS and helpers to add it to frameworks like Django.
-
 #### Features ####
 
 - Send and Receive messages
 - Chat Room support
-- History retrieval (in-memory only, storage support to be added)
+- History. Two backends: In-Memory and Cassandra.
+- Custom Django templatetag to insert a chat client widget in your site.
 
 
 ### How to Install and Run the Server (Crossbar) ###
@@ -27,6 +26,21 @@ $ ./run
 
 This starts a Crossbar server and you can test it pointing your browser at `http://localhost:8080` for a very ugly and basic implementation of a server.
 
+
+### Using Client in a Django (alpha) ###
+
+1. Add chato.utils.django' to your `INSTALLED_APPS`.
+2. Go into your template and do:
+
+```html
+{% load chato_client %}
+{% chato_widget %}
+```
+
+This will add the Chat-O widget to your page and should work right away.
+
+The template tag accepts two arguments: include_css and include_jquery. They both default to True.
+
 #### Tests ####
 
 If you wanna run the tests:
@@ -34,3 +48,10 @@ If you wanna run the tests:
 ```bash
 $ ./run_tests
 ```
+
+
+### Roadmap ###
+
+- Refactor Django code.
+- Create proper encapsulated CSS
+- Add flexibility through configuration flags and settings variables.
