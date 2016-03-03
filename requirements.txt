@@ -1,0 +1,3 @@
+cassandra-driver==3.0.0
+crossbar==0.12.1
+
