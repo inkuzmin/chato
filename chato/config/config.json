@@ -26,7 +26,7 @@
                "type": "web",
                "endpoint": {
                   "type": "tcp",
-                  "port": 8080
+                  "port": 9166
                },
                "paths": {
                   "/": {
@@ -55,9 +55,9 @@
                   "endpoint": {
                      "type": "tcp",
                      "host": "127.0.0.1",
-                     "port": 8080
+                     "port": 9166
                   },
-                  "url": "ws://127.0.0.1:8080/ws"
+                  "url": "ws://127.0.0.1:9166/ws"
                }
             }
          ]
