@@ -46,6 +46,7 @@ class AppSession(ApplicationSession):
             - channel
             - author
             - message
+            - timestamp (UTC unix timestamp)
         """
         self.log.info('Call to sendMessage: {payload}', payload=payload)
         self._save_to_history(payload)

@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import time
 from datetime import datetime
 from collections import defaultdict
 
@@ -8,7 +9,6 @@ from twisted.internet.defer import inlineCallbacks, returnValue
 
 from cassandra.cluster import Cluster
 from cassandra.query import dict_factory
-from cassandra.util import uuid_from_time
 from cassandra import InvalidRequest, AlreadyExists
 
 
@@ -53,7 +53,9 @@ class MemoryHistory(History):
 
         MemoryHistory._history[channel_id].append({
             'author': author,
-            'message': message})
+            'message': message,
+            'timestamp': time.mktime(
+                datetime.utcnow().timetuple())})
 
     def get(self, channel_id, lines=100, offset=0):
         """Get batches of old messages stored in the history.
@@ -171,7 +173,9 @@ class CassandraHistory(object):
 
     @inlineCallbacks
     def save(self, channel_id, author, message):
-        """Saves the history into an in-memory structure.
+        """Saves the history into a cassandra table.
+
+        message_id is a timeuuid with no timezone information.
 
         :param channel_id: The channel_id.
         :param author: The author name.
@@ -180,11 +184,10 @@ class CassandraHistory(object):
         query = """
             INSERT INTO
                 room_history (room_id, message_id, author, message)
-            VALUES (%s, %s, %s, %s)
+            VALUES (%s, now(), %s, %s)
         """
 
-        message_id = uuid_from_time(datetime.now())
-        yield self.execute(query, (channel_id, message_id, author, message))
+        yield self.execute(query, (channel_id, author, message))
 
     @inlineCallbacks
     def get(self, channel_id, lines=100, offset=0):
@@ -195,7 +198,11 @@ class CassandraHistory(object):
         :param offset: Defaults to 0, works similarly as SQL Offset.
         """
         query = """
-            SELECT author, message FROM room_history
+            SELECT
+                unixTimestampOf(message_id) AS timestamp,
+                author,
+                message
+            FROM room_history
             WHERE room_id = %s
             LIMIT {}
         """.format(lines)
