@@ -18,6 +18,15 @@ var chatWindow = null;
 setupDemo();
 connect();
 
+function getNick() {
+   return presetNicks[Math.floor(Math.random() * presetNicks.length)];
+}
+
+function getChannel() {
+   return channelID;
+
+}
+
 
 function subscribeChannel(channelID) {
    if (currentSubscription === null) {
@@ -52,12 +61,14 @@ function connect() {
       sess = session;
 
       console.log("Connected! Is Reconnect:" + isReconnect);
-      console.log("Attempting to subscribe channel ", channelID);
+
+      var channel = getChannel();
+      console.log("Attempting to subscribe channel ", channel);
 
       if (!isReconnect) {
-         subscribeChannel(channelID);
-         changeChannelIndicators(channelID);
-         getHistory(channelID)
+         subscribeChannel(channel);
+         changeChannelIndicators(channel);
+         getHistory(channel)
          isReconnect = true;
       }
 

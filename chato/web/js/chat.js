@@ -19,6 +19,16 @@ setupDemo();
 connect();
 
 
+function getNick() {
+   return presetNicks[Math.floor(Math.random() * presetNicks.length)];
+}
+
+function getChannel() {
+   return channelID;
+
+}
+
+
 function subscribeChannel(channelID) {
    if (currentSubscription === null) {
       sess.subscribe(channelID, onMessage).then(
@@ -53,12 +63,15 @@ function connect() {
       sess = session;
 
       console.log("Connected! Is Reconnect:" + isReconnect);
-      console.log("Attempting to subscribe channel ", channelID);
+
+      var channel = getChannel();
+      console.log("Attempting to subscribe channel ", channel);
+
 
       if (!isReconnect) {
-         subscribeChannel(channelID);
-         changeChannelIndicators(channelID);
-         getHistory(channelID)
+         subscribeChannel(channel);
+         changeChannelIndicators(channel);
+         getHistory(channel)
          isReconnect = true;
       }
 
@@ -108,7 +121,7 @@ function setupDemo() {
 
    // set random preset nick
    nick = $("#nick");
-   var randomNick = presetNicks[Math.floor(Math.random() * presetNicks.length)];
+   var randomNick = getNick();
    nick.val(randomNick);
    oldNick = nick.val();
    getNickColor(nick.val()); // assigns a color to the nick
